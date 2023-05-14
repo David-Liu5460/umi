@@ -11,6 +11,8 @@ import { Button, Divider, Drawer, message } from 'antd';
 import React, { useRef, useState } from 'react';
 import CreateForm from './components/CreateForm';
 import UpdateForm, { FormValueType } from './components/UpdateForm';
+import useScrollPosition from '@/hooks/useScrollPosition';
+import useLocalStorage from '@/hooks/useLocalStorage';
 
 const { addUser, queryUserList, deleteUser, modifyUser } =
   services.UserController;
@@ -90,6 +92,8 @@ const TableList: React.FC<unknown> = () => {
   const actionRef = useRef<ActionType>();
   const [row, setRow] = useState<API.UserInfo>();
   const [selectedRowsState, setSelectedRows] = useState<API.UserInfo[]>([]);
+  const position = useScrollPosition ();
+  const [name, setName] = useLocalStorage("name");
   const columns: ProDescriptionsItemProps<API.UserInfo>[] = [
     {
       title: '名称',
@@ -145,6 +149,10 @@ const TableList: React.FC<unknown> = () => {
         title: 'CRUD 示例',
       }}
     >
+      {position}
+      ja{name}22
+      <Button onClick={() => setName('lm')}>设置name</Button>
+
       <ProTable<API.UserInfo>
         headerTitle="查询表格"
         actionRef={actionRef}
