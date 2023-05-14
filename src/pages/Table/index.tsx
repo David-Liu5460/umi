@@ -8,11 +8,12 @@ import {
   ProTable,
 } from '@ant-design/pro-components';
 import { Button, Divider, Drawer, message } from 'antd';
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useReducer } from 'react';
 import CreateForm from './components/CreateForm';
 import UpdateForm, { FormValueType } from './components/UpdateForm';
 import useScrollPosition from '@/hooks/useScrollPosition';
 import useLocalStorage from '@/hooks/useLocalStorage';
+import reducer from '@/hooks/reducer';
 
 const { addUser, queryUserList, deleteUser, modifyUser } =
   services.UserController;
@@ -94,6 +95,11 @@ const TableList: React.FC<unknown> = () => {
   const [selectedRowsState, setSelectedRows] = useState<API.UserInfo[]>([]);
   const position = useScrollPosition ();
   const [name, setName] = useLocalStorage("name");
+
+  const [state, dispatch] = useReducer(reducer, {
+    counter: 0
+  });
+
   const columns: ProDescriptionsItemProps<API.UserInfo>[] = [
     {
       title: '名称',
@@ -152,6 +158,12 @@ const TableList: React.FC<unknown> = () => {
       {position}
       ja{name}22
       <Button onClick={() => setName('lm')}>设置name</Button>
+
+      <div>
+        <h2>Home当前计数: {state.counter}</h2>
+        <button onClick={e => dispatch({type: "increment"})}>+1</button>
+        <button onClick={e => dispatch({type: "decrement"})}>-1</button>
+      </div>
 
       <ProTable<API.UserInfo>
         headerTitle="查询表格"
